@@ -113,7 +113,7 @@ data "aws_network_interfaces" "alb_enis" {
 
 # Web ALB ENI details in VPC-B
 data "aws_network_interface" "alb_eni" {
-  count = length(data.aws_network_interfaces.alb_enis.ids)
+  count = 2
   id = data.aws_network_interfaces.alb_enis.ids[count.index]
   depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
 }
