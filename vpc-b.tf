@@ -4,7 +4,7 @@ module "vpc_b" {
 
   cidr                 = "10.0.0.0/16"
   secondary_cidr       = "100.65.0.0/24"
-  vpc_name             = "NATGW-VPC-B"
+  vpc_name             = local.vpc_b_name
   azs                  = ["ap-southeast-2a", "ap-southeast-2b"]
   non_routable_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
   routable_subnets     = ["100.65.0.0/25", "100.65.0.128/25"]
@@ -15,7 +15,8 @@ module "web_server" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
 
-  instance_hostname           = "natgwdemo-web-server"
+  random_suffix               = false
+  instance_hostname           = local.webserver_hostname
   vpc_id                      = module.vpc_b.vpc.id
   subnet_id                   = module.vpc_b.non_routable_subnets[0].id
   associate_public_ip_address = true
@@ -28,7 +29,7 @@ module "web_server" {
 
 # Create Security Group for ALB
 resource "aws_security_group" "alb_sg" {
-  name        = "alb-sg"
+  name        = local.albsg_name
   description = "Allow all traffic to alb"
   vpc_id      = module.vpc_b.vpc.id
 
@@ -40,16 +41,17 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "alb-sg"
+    Name        = local.albsg_name
+    Environment = "NatGwDemo"
   }
 }
 
-# Create NLB
+# Create ALB
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name               = "alb"
+  name               = local.alb_name
   load_balancer_type = "application"
   internal           = true
   enable_http2       = false
@@ -59,7 +61,7 @@ module "alb" {
 
   target_groups = [
     {
-      name_prefix      = "web-"
+      name_prefix      = "walb-"
       backend_protocol = "HTTP"
       backend_port     = 80
       target_type      = "instance"
@@ -81,7 +83,8 @@ module "alb" {
   ]
 
   tags = {
-    Name = "alb"
+    Name        = local.alb_name
+    Environment = "NatGwDemo"
   }
 
   depends_on = [module.web_server]
@@ -96,4 +99,21 @@ resource "aws_route" "vpc_b_to_vpc_a" {
   transit_gateway_id     = module.tgw.tgw.id
 
   depends_on = [module.tgw]
+}
+
+# Web ALB ENIs in VPC-B
+data "aws_network_interfaces" "alb_enis" {
+  filter {
+    name   = "description"
+    values = ["ELB ${module.alb.lb_arn_suffix}"]
+  }
+
+  depends_on = [module.alb]
+}
+
+# Web ALB ENI details in VPC-B
+data "aws_network_interface" "alb_eni" {
+  count = length(data.aws_network_interfaces.alb_enis.ids)
+  id = data.aws_network_interfaces.alb_enis.ids[count.index]
+  depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
 }

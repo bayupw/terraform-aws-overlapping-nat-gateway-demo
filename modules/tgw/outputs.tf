@@ -12,8 +12,3 @@ output "tgw_vpc_attachments" {
   description = "TGW VPC attachment objects"
   value       = aws_ec2_transit_gateway_vpc_attachment.this
 }
-
-output "vpcs" {
-  description = ""
-  value       = data.aws_vpc.vpcs
-}

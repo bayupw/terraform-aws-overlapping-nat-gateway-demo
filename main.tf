@@ -1,9 +1,18 @@
+# Create 3 digit random string
+resource "random_string" "this" {
+  length  = 3
+  number  = true
+  special = false
+  upper   = false
+}
+
 # Create IAM role and IAM instance profile for SSM
 module "ssm_instance_profile" {
   source  = "bayupw/ssm-instance-profile/aws"
   version = "1.0.0"
 }
 
+# Create TGW
 module "tgw" {
   source = "./modules/tgw"
 
@@ -14,7 +23,7 @@ module "tgw" {
       dns_support                                     = true
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
-      tag                                             = "VPC-A-Attachment"
+      tag                                             = "VPC-A-Att-${random_string.this.id}"
       tgw_route_cidr_block                            = module.vpc_a.secondary_cidr
     }
     vpc_b = {
@@ -23,7 +32,7 @@ module "tgw" {
       dns_support                                     = true
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
-      tag                                             = "VPC-B-Attachment"
+      tag                                             = "VPC-B-Att-${random_string.this.id}"
       tgw_route_cidr_block                            = module.vpc_b.secondary_cidr
     }
   }

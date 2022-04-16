@@ -6,7 +6,8 @@ resource "aws_ec2_transit_gateway" "this" {
   dns_support                     = var.dns_support == true ? "enable" : "disable"
 
   tags = {
-    Name = var.description
+    Name        = var.description
+    Environment = "NatGwDemo"
   }
 }
 
@@ -30,26 +31,12 @@ resource "aws_ec2_transit_gateway_route_table" "this" {
   transit_gateway_id = aws_ec2_transit_gateway.this.id
 
   tags = {
-    Name = "routable-tgw-rtb"
+    Name        = "routable-tgw-rtb"
+    Environment = "NatGwDemo"
   }
 }
 
 data "aws_vpc" "vpcs" {
   for_each = aws_ec2_transit_gateway_vpc_attachment.this
-  id = each.value.vpc_id
+  id       = each.value.vpc_id
 }
-
-/* locals {
-  tgw_attachment = {
-      for k1, v1 in aws_ec2_transit_gateway_vpc_attachment.this : k1 => v1.id
-  }
-
-  tgw_second_cidr = {
-        for k2, v2 in data.aws_vpc.vpcs : k2 => v2.cidr_block_associations[1].cidr_block
-  }
-
-  tgw_routes = {
-      for vpc, attachment_id in local.tgw_attachment:
-      attachment_id => lookup(local.tgw_second_cidr, vpc, null)
-  }
-} */
