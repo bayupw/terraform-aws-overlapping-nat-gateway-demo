@@ -21,7 +21,7 @@ module "client" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
 
-  instance_hostname           = "client-instance"
+  instance_hostname           = "natgwdemo-client"
   vpc_id                      = module.vpc_a.vpc.id
   subnet_id                   = module.vpc_a.non_routable_subnets[0].id
   associate_public_ip_address = true

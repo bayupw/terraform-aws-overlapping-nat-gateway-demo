@@ -15,7 +15,7 @@ module "web_server" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
 
-  instance_hostname           = "web-server-instance"
+  instance_hostname           = "natgwdemo-web-server"
   vpc_id                      = module.vpc_b.vpc.id
   subnet_id                   = module.vpc_b.non_routable_subnets[0].id
   associate_public_ip_address = true
