@@ -3,9 +3,14 @@ output "alb_dns_name" {
   value       = module.alb.lb_dns_name
 }
 
-output "alb_private_ips" {
+output "alb_private_ip_1" {
   description = "ALB Private IPs"
-  value       = data.aws_network_interface.alb_eni[*].private_ip
+  value       = data.aws_network_interface.alb_eni_0.private_ip
+}
+
+output "alb_private_ip_2" {
+  description = "ALB Private IPs"
+  value       = data.aws_network_interface.alb_eni_1.private_ip
 }
 
 output "instance_client_private_ip" {

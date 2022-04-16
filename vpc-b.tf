@@ -111,9 +111,14 @@ data "aws_network_interfaces" "alb_enis" {
   depends_on = [module.alb]
 }
 
-# Web ALB ENI details in VPC-B
-data "aws_network_interface" "alb_eni" {
-  count = 2
-  id = data.aws_network_interfaces.alb_enis.ids[count.index]
+# Web ALB ENI 0 details in VPC-B
+data "aws_network_interface" "alb_eni_0" {
+  id         = data.aws_network_interfaces.alb_enis.ids[0]
+  depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
+}
+
+# Web ALB ENI 1 details in VPC-B
+data "aws_network_interface" "alb_eni_1" {
+  id         = data.aws_network_interfaces.alb_enis.ids[1]
   depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
 }
