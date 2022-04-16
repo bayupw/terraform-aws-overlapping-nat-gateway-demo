@@ -1,7 +1,7 @@
 # Terraform AWS Overlapping IP NAT Gateway Demo 
 
 Terraform code to demonstrate how AWS NAT Gateway can be used to solve overlapping IP in AWS.
-![Terraform AWS Overlapping IP NAT Gateway Demo](images/terraform-aws-overlapping-nat-gateway-demo.png "Terraform AWS Overlapping IP NAT Gateway Demo")
+![Terraform AWS Overlapping IP NAT Gateway Demo](images/terraform-aws-overlapping-nat-gateway-demo1.png "Terraform AWS Overlapping IP NAT Gateway Demo")
 
 ## Environment Variables
 
