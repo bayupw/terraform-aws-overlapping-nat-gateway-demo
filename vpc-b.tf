@@ -4,7 +4,7 @@ module "vpc_b" {
 
   cidr                 = "10.0.0.0/16"
   secondary_cidr       = "100.65.0.0/24"
-  vpc_name             = "VPC-B"
+  vpc_name             = "NATGW-VPC-B"
   azs                  = ["ap-southeast-2a", "ap-southeast-2b"]
   non_routable_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
   routable_subnets     = ["100.65.0.0/25", "100.65.0.128/25"]
