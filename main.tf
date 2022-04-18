@@ -19,7 +19,7 @@ module "tgw" {
   vpc_attachments = {
     vpc_a = {
       vpc_id                                          = module.vpc_a.vpc.id
-      subnet_ids                                      = [module.vpc_a.routable_subnets[0].id]
+      subnet_ids                                      = [module.vpc_a.routable_subnets[0].id, module.vpc_a.routable_subnets[1].id]
       dns_support                                     = true
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
@@ -28,7 +28,7 @@ module "tgw" {
     }
     vpc_b = {
       vpc_id                                          = module.vpc_b.vpc.id
-      subnet_ids                                      = [module.vpc_b.routable_subnets[0].id, module.vpc_b.routable_subnets[1].id]
+      subnet_ids                                      = [module.vpc_b.routable_subnets[0].id]
       dns_support                                     = true
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
