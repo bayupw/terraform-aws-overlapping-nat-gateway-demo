@@ -101,6 +101,11 @@ resource "aws_route" "vpc_a_to_vpc_b" {
   depends_on = [module.tgw]
 }
 
+resource "time_sleep" "wait_alb" {
+  create_duration = "3m"
+  depends_on      = [module.alb]
+}
+
 # Web ALB ENIs in VPC-A
 data "aws_network_interfaces" "alb_enis" {
   filter {
@@ -108,17 +113,17 @@ data "aws_network_interfaces" "alb_enis" {
     values = ["ELB ${module.alb.lb_arn_suffix}"]
   }
 
-  depends_on = [module.alb]
+  depends_on = [time_sleep.wait_alb]
 }
 
 # Web ALB ENI 0 details in VPC-A
 data "aws_network_interface" "alb_eni_0" {
   id         = data.aws_network_interfaces.alb_enis.ids[0]
-  depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
+  depends_on = [time_sleep.wait_alb, data.aws_network_interfaces.alb_enis]
 }
 
 # Web ALB ENI 1 details in VPC-A
 data "aws_network_interface" "alb_eni_1" {
   id         = data.aws_network_interfaces.alb_enis.ids[1]
-  depends_on = [module.alb, data.aws_network_interfaces.alb_enis]
+  depends_on = [time_sleep.wait_alb, data.aws_network_interfaces.alb_enis]
 }
