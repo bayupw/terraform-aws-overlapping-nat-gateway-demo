@@ -22,7 +22,7 @@ module "web_server" {
   associate_public_ip_address = true
   private_ip                  = cidrhost(module.vpc_a.non_routable_subnets[0].cidr_block, 11)
   iam_instance_profile        = module.ssm_instance_profile.aws_iam_instance_profile
-  custom_ingress_cidrs        = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "100.65.0.0/24"]
+  custom_ingress_cidrs        = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", module.vpc_a.secondary_cidr]
 
   depends_on = [module.ssm_instance_profile]
 }
