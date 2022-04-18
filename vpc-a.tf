@@ -6,7 +6,7 @@ module "vpc_a" {
   secondary_cidr       = "100.64.0.0/24"
   vpc_name             = local.vpc_a_name
   azs                  = ["ap-southeast-2a", "ap-southeast-2b"]
-  non_routable_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+  non_routable_subnets = ["10.0.0.0/24", "10.0.1.0/24"]
   routable_subnets     = ["100.64.0.0/25", "100.64.0.128/25"]
 }
 

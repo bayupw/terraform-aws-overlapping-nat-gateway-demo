@@ -1,13 +1,13 @@
-# Create VPC-A
+# Create VPC-B
 module "vpc_b" {
   source = "./modules/vpc"
 
   cidr                 = "10.0.0.0/16"
-  secondary_cidr       = "100.64.0.0/24"
+  secondary_cidr       = "100.65.0.0/24"
   vpc_name             = local.vpc_b_name
   azs                  = ["ap-southeast-2a"]
-  non_routable_subnets = ["10.0.1.0/24"]
-  routable_subnets     = ["100.64.0.0/24"]
+  non_routable_subnets = ["10.0.0.0/24"]
+  routable_subnets     = ["100.65.0.0/24"]
 }
 
 # Create NAT Gateway
