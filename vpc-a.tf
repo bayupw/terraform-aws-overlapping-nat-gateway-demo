@@ -14,7 +14,7 @@ module "vpc_a" {
 module "web_server" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
-
+  
   random_suffix               = false
   instance_hostname           = local.webserver_hostname
   vpc_id                      = module.vpc_a.vpc.id
@@ -22,7 +22,7 @@ module "web_server" {
   associate_public_ip_address = true
   private_ip                  = cidrhost(module.vpc_a.non_routable_subnets[0].cidr_block, 11)
   iam_instance_profile        = module.ssm_instance_profile.aws_iam_instance_profile
-  custom_ingress_cidrs        = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", module.vpc_a.secondary_cidr]
+  custom_ingress_cidrs        = [module.vpc_a.secondary_cidr]
 
   depends_on = [module.ssm_instance_profile]
 }

@@ -20,7 +20,7 @@ resource "aws_nat_gateway" "this" {
 module "client" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
-
+  
   random_suffix               = false
   instance_hostname           = local.client_hostname
   vpc_id                      = module.vpc_b.vpc.id
