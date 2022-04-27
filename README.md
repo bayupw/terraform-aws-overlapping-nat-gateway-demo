@@ -6,6 +6,9 @@ Terraform code to demonstrate how AWS NAT Gateway can be used to solve overlappi
 ## Environment Variables
 
 To run this project, you will need to set the following environment variables
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+- AWS_DEFAULT_REGION
 
 ## Run Locally
 
