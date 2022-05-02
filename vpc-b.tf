@@ -20,14 +20,19 @@ resource "aws_nat_gateway" "this" {
 module "client" {
   source  = "bayupw/amazon-linux-2/aws"
   version = "1.0.0"
-  
-  random_suffix               = false
-  instance_hostname           = local.client_hostname
-  vpc_id                      = module.vpc_b.vpc.id
-  subnet_id                   = module.vpc_b.non_routable_subnets[0].id
-  associate_public_ip_address = true
-  private_ip                  = cidrhost(module.vpc_b.non_routable_subnets[0].cidr_block, 11)
-  iam_instance_profile        = module.ssm_instance_profile.aws_iam_instance_profile
+
+  random_suffix                  = false
+  instance_hostname              = local.client_hostname
+  vpc_id                         = module.vpc_b.vpc.id
+  subnet_id                      = module.vpc_b.non_routable_subnets[0].id
+  private_ip                     = cidrhost(module.vpc_b.non_routable_subnets[0].cidr_block, 11)
+  iam_instance_profile           = module.ssm_instance_profile.aws_iam_instance_profile
+  associate_public_ip_address    = true
+  enable_password_authentication = true
+  random_password                = false
+  instance_username              = var.username
+  instance_password              = var.password
+  key_name                       = var.key_name
 
   depends_on = [module.vpc_b, module.ssm_instance_profile]
 }
