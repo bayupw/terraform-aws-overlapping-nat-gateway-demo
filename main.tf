@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 # Create 3 digit random string
 resource "random_string" "this" {
   length  = 3
