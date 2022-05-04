@@ -33,6 +33,10 @@ output "web_private_ip" {
   value       = module.web_server.aws_instance.private_ip
 }
 
+output "web_private_dns" {
+  description = "Web Server Private DNS name"
+  value       = aws_route53_record.web.name
+}
 
 output "natgw_private_ip" {
   description = "NAT Gateway Private IP"

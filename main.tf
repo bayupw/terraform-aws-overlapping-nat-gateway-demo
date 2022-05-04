@@ -75,3 +75,20 @@ resource "aws_ec2_transit_gateway_route_table_association" "vpc_b_assoc" {
 
   depends_on = [module.tgw]
 }
+
+# Create Private Zone aviatrix.demo
+resource "aws_route53_zone" "natgw" {
+  name = "natgw.demo"
+
+  vpc {
+    vpc_id = module.vpc_a.vpc.id
+  }
+}
+
+resource "aws_route53_record" "web" {
+  zone_id = aws_route53_zone.natgw.zone_id
+  name    = "web.${aws_route53_zone.natgw.name}"
+  type    = "A"
+  ttl     = "300"
+  records = ["100.64.0.11"]
+}
